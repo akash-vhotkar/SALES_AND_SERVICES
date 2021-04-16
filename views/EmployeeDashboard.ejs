@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+    <title>callamanagement</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        #myform {
+            display: none;
+        }
+    </style>
+</head>
+<style>
+
+</style>
+
+<body class="bg-color">
+
+    <nav class="navbar navbar-expand-sm navbar-light">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/Emp/closeleads">completed lead</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-sm-4" href="/auth/forget">forget password</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/auth/logout">logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="text-center my-4"> Employee Page</h1>
+        <% if(typeof messages !='undefined' ){ %>
+            <div>
+                <% messages.forEach(i=>{ %>
+                    <div class="alert alert-warning alert-dismissible fade show mb-2 form-control" id="myalert"
+                        role="alert">
+                        <strong>
+                            <%- i.msg %>
+                        </strong>
+
+                        <button type="button" class="btn-close" id="mybtn" data-bs-dismiss="alert"
+                            aria-label="Close"></button>
+                    </div>
+                    <%}); %>
+            </div>
+            <% } %>
+
+    </div>
+
+    <div class="container">
+
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped">
+                <thead class="thead">
+                    <tr>
+                        <th scope="col">Customer id</th>
+                        <th scope="col">Customer Name</th>
+                        <th scope="col">Customer email</th>
+                        <th scope="col">lead type</th>
+                        <th scope="col"> lead status</th>
+                        <th scope="col">lead desc</th>
+    
+                        <th scope="col">forworded to</th>
+                        <th scope="col">employee</th>
+                        <th scope="col">close lead</th>
+    
+    
+                        <th scope="col">lead Desc</th>
+    
+    
+                    </tr>
+                </thead>
+                <tbody>
+    
+    
+    
+                    <% if(typeof cust !='undefined' ){ %>
+                        <% cust.forEach(i=>{ %>
+                            <tr>
+                                <th scope="row">
+                                    <a style="text-decoration: none; ">
+                                        <%- i.leadid %>
+                                    </a>
+    
+                                </th>
+                                <td>
+                                    <%- i.c_name %>
+                                </td>
+                                <td>
+                                    <%- i.c_email %>
+                                </td>
+                                <td>
+                                    <%- i.lead_type%>
+                                </td>
+                                <td>
+                                    <%- i.lead_status_string%>
+                                </td>
+                                <td>
+                                    <%- i.lead_desc%>
+                                </td>
+    
+                                <td>
+                                    <%- i.forworded_to_dept_name%>
+                                </td>
+                                <td>
+                                    <%-i.forworded_to_emp_name%>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary" type="submit" onclick="closeleadfun(this)">close
+                                        lead</button>
+    
+                                </td>
+    
+                                <td>
+                                    <form action="/Emp/calldesc/<%-i.leadid %>" method="GET">
+                                        <button class="btn btn-primary" type="submit">lead desc</button>
+                                    </form>
+                                </td>
+    
+                            </tr>
+    
+    
+    
+                            <%}); %>
+                                <% } %>
+    
+    
+    
+    
+    
+    
+    
+                </tbody>
+            </table>
+        </div>
+
+        <form action="/Emp/close" class="w-75 m-auto form-bg py-4" id="myform" method="POST">
+            <div>
+                <h1 class="text-center text-uppercase"> close lead</h1>
+            </div>
+            <div class="form-group p-3">
+                <label>Customer Name <span class="star">*</span></label>
+                <input type="text" name="c_name" id="custname" class="form-control" aria-describedby="emailHelp"
+                    placeholder="Enter Customer Name" required>
+            </div>
+            <div class="form-group p-3">
+                <label>Customer Id <span class="star">*</span></label>
+                <input type="text" readonly class="form-control" id="custid" name="leadid" id="exampleInputEmail1"
+                    aria-describedby="emailHelp" placeholder="Enter Customer Id">
+
+            </div>
+            <div class="form-group p-3">
+                <label>Customer Email<span class="star">*</span></label>
+                <input type="email" name="c_email" id="custemail" class="form-control" id="exampleInputEmail1"
+                    aria-describedby="emailHelp" placeholder="Enter email" required>
+
+            </div>
+
+
+            <div class="form-group p-3 ">
+                <label for="exampleInputPassword1">Enter lead close description <span>*</span> </label>
+                <textarea name="close_desc" id="close" rows="3" placeholder="Enter lead close desc"
+                    class="form-control"></textarea>
+            </div>
+
+            <div class="form-group p-3">
+                <input type="submit" class="form-control p-2 bg-primary text-white" id="exampleInputPassword1"
+                    value="Close Lead">
+            </div>
+
+        </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"
+        integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js"
+        integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj"
+        crossorigin="anonymous"></script>
+    <script>
+        function closeleadfun(btn) {
+            const myform = document.querySelector('#myform');
+            myform.style.display = 'block';
+            const parent = btn.parentElement.parentElement;
+            const c_id = parent.children[0].innerText;
+            const c_name = parent.children[1].innerText;
+            const c_email = parent.children[2].innerText;
+
+            const custname = document.querySelector('#custname');
+            const custid = document.querySelector('#custid');
+            const custemail = document.querySelector('#custemail');
+
+            custname.value = c_name;
+            custid.value = c_id;
+            custemail.value = c_email;
+
+
+        }
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>

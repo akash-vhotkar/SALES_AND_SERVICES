@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+    <title>Hod Department page</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        #myform {
+            display: none;
+        }
+    </style>
+</head>
+<style>
+
+</style>
+
+<body class="bg-color">
+    <nav class="navbar navbar-light bg-light d-flex justify-content-end">
+        <a href="/auth/logout" class="btn text-uppercase text-danger"> logout</a>
+    </nav>
+
+    <!-- headfing of department page   -->
+
+    <div class="container">
+        <h1 class="text-center"> Department Page</h1>
+        <% if(typeof messages !='undefined' ){ %>
+            <div onclick="de()">
+                <% messages.forEach(i=>{ %>
+                    <div class="alert alert-warning alert-dismissible fade show mb-2" id="myalert" role="alert">
+                        <strong>alerts </strong>
+                        <%- i.msg %>
+                            <button type="button" class="btn-close" id="mybtn" data-bs-dismiss="alert"
+                                aria-label="Close"></button>
+                    </div>
+                    <%}); %>
+            </div>
+            <% } %>
+    </div>
+
+
+
+
+
+    <!---------------------- tabs of the home page ---------------------------->
+
+    <div class="container">
+        <ul class="nav" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="assign-tab" data-toggle="tab" href="#assignleads" role="tab"
+                    aria-controls="assignleads" aria-selected="true">currunt pending to assign leads</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="close-tab" data-toggle="tab" href="#closeleads" role="tab"
+                    aria-controls="closeleads" aria-selected="false">completed leads</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="production-tab" data-toggle="tab" href="#productionleads" role="tab"
+                    aria-controls="productionleads" aria-selected="false">production leads</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="emp-tab" data-toggle="tab" href="#myemp" role="tab" aria-controls="myemp"
+                    aria-selected="false">All Employees</a>
+            </li>
+
+
+
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+
+            <!--------------------------- show  pending leads to be assign to the employee  ----------------------->
+            <div class="tab-pane fade show active table-responsive" id="assignleads" role="tabpanel"
+                aria-labelledby="assign-tab">
+                <table class="table table-hover table-bordered table-striped">
+                    <thead class="thead">
+                        <tr>
+                            <th scope="col">Customer id</th>
+                            <th scope="col">Customer Name</th>
+                            <th scope="col">Customer email</th>
+                            <th scope="col">lead type</th>
+                            <th scope="col"> lead status</th>
+                            <th scope="col">lead desc</th>
+
+                            <th scope="col">forworded to</th>
+                            <th scope="col">employee</th>
+                            <th scope="col">close lead</th>
+
+
+                            <th scope="col">lead Desc</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+
+                        <% if(typeof pendingtoassign !='undefined' ){ %>
+                            <% pendingtoassign.forEach(i=>{ %>
+                                <tr>
+                                    <th scope="row">
+                                        <a href="/Hod/Assign/<%- i.leadid %>" style="text-decoration: none; ">
+                                            <%- i.leadid %>
+                                        </a>
+                                    </th>
+                                    <td>
+                                        <%- i.c_name %>
+                                    </td>
+                                    <td>
+                                        <%- i.c_email %>
+                                    </td>
+                                    <td>
+                                        <%- i.lead_type%>
+                                    </td>
+                                    <td>
+                                        <%- i.lead_status_string%>
+                                    </td>
+                                    <td>
+                                        <%- i.lead_desc%>
+                                    </td>
+
+                                    <td>
+                                        <%- i.forworded_to_dept_name%>
+                                    </td>
+                                    <td>
+                                        <%-i.forworded_to_emp_name%>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary" type="submit" onclick="closeleadfun(this)">close
+                                            lead</button>
+
+                                    </td>
+
+                                    <td>
+                                        <form action="/Hod/calldesc/<%-i.leadid%>" method="POST">
+                                            <button class="btn btn-primary" type="submit">lead desc</button>
+                                        </form>
+                                    </td>
+
+                                </tr>
+
+
+
+                                <%}); %>
+                                    <% } %>
+
+
+
+
+
+
+
+                    </tbody>
+                </table>
+            </div>
+
+
+
+            <!----------------------------------- completed leads by employee   --------------------------->
+            <div class="tab-pane fade table-responsive" id="closeleads" role="tabpanel" aria-labelledby="close-tab">
+
+
+                <table class="table table-hover table-bordered table-striped">
+                    <thead class="thead">
+                        <tr>
+                            <th scope="col">Customer id</th>
+                            <th scope="col">Customer Name</th>
+                            <th scope="col">Customer email</th>
+                            <th scope="col">lead type</th>
+                            <th scope="col"> lead status</th>
+                            <th scope="col">lead desc</th>
+
+                            <th scope="col">forworded to</th>
+                            <th scope="col">employee</th>
+                            <th scope="col">close lead</th>
+
+
+                            <th scope="col">lead Desc</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+
+                        <% if(typeof closedleads !='undefined' ){ %>
+                            <% closedleads.forEach(i=>{ %>
+                                <tr>
+                                    <th scope="row">
+                                        <a style="text-decoration: none; ">
+                                            <%- i.leadid %>
+                                        </a>
+
+                                    </th>
+                                    <td>
+                                        <%- i.c_name %>
+                                    </td>
+                                    <td>
+                                        <%- i.c_email %>
+                                    </td>
+                                    <td>
+                                        <%- i.lead_type%>
+                                    </td>
+                                    <td>
+                                        <%- i.lead_status_string%>
+                                    </td>
+                                    <td>
+                                        <%- i.lead_desc%>
+                                    </td>
+
+                                    <td>
+                                        <%- i.forworded_to_dept_name%>
+                                    </td>
+                                    <td>
+                                        <%-i.forworded_to_emp_name%>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary" type="submit" onclick="closeleadfun(this)">close
+                                            lead</button>
+
+                                    </td>
+
+                                    <td>
+                                        <form action="/Hod/calldesc/<%-i.leadid%>" method="GET">
+                                            <button class="btn btn-primary" type="submit">lead desc</button>
+                                        </form>
+                                    </td>
+
+                                </tr>
+
+
+
+                                <%}); %>
+                                    <% } %>
+
+
+
+
+
+
+
+                    </tbody>
+                </table>
+
+
+            </div>
+
+
+            <!-----------------------------  curruntly working leads  ------------------------------------->
+
+            <div class="tab-pane fade table-responsive" id="productionleads" role="tabpanel"
+                aria-labelledby="production-tab">
+
+
+
+                <table class="table table-hover table-bordered table-striped">
+                    <thead class="thead">
+                        <tr>
+                            <th scope="col">Customer id</th>
+                            <th scope="col">Customer Name</th>
+                            <th scope="col">Customer email</th>
+                            <th scope="col">lead type</th>
+                            <th scope="col"> lead status</th>
+                            <th scope="col">lead desc</th>
+
+                            <th scope="col">forworded to</th>
+                            <th scope="col">employee</th>
+                            <th scope="col">close lead</th>
+
+
+                            <th scope="col">lead Desc</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+
+                        <% if(typeof productionleads !='undefined' ){ %>
+                            <% productionleads.forEach(i=>{ %>
+                                <tr>
+                                    <th scope="row">
+                                        <a href="/Hod/Assign/<%- i.leadid %>" style="text-decoration: none; ">
+                                            <%- i.leadid %>
+                                        </a>
+
+                                    </th>
+                                    <td>
+                                        <%- i.c_name %>
+                                    </td>
+                                    <td>
+                                        <%- i.c_email %>
+                                    </td>
+                                    <td>
+                                        <%- i.lead_type%>
+                                    </td>
+                                    <td>
+                                        <%- i.lead_status_string%>
+                                    </td>
+                                    <td>
+                                        <%- i.lead_desc%>
+                                    </td>
+
+                                    <td>
+                                        <%- i.forworded_to_dept_name%>
+                                    </td>
+                                    <td>
+                                        <%-i.forworded_to_emp_name%>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary" type="submit" onclick="closeleadfun(this)">close
+                                            lead</button>
+
+                                    </td>
+
+                                    <td>
+                                        <form action="/Hod/calldesc/<%-i.leadid%>" method="POST">
+                                            <button class="btn btn-primary" type="submit">lead desc</button>
+                                        </form>
+                                    </td>
+
+                                </tr>
+
+
+
+                                <%}); %>
+                                    <% } %>
+
+
+
+
+
+
+
+                    </tbody>
+                </table>
+
+            </div>
+
+
+
+            <!-- all employees data -->
+
+            <div class="tab-pane fade" id="myemp" role="tabpanel" aria-labelledby="emp-tab">
+
+                <div class="col-md-8 d-flex align-self-center justify-content-center m-auto  table-responsive">
+
+
+
+                    <table class="table table-hover table-bordered table-striped">
+                        <thead class="thead">
+                            <tr>
+                                <th scope="col">Employee id</th>
+                                <th scope="col">Employee Name</th>
+                                <th scope="col">Employe email</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+
+
+                            <% if(typeof emp !='undefined' ){ %>
+                                <% emp.forEach(i=>{ %>
+
+                                    <tr>
+                                        <th scope="row">
+                                            <%- i.emp_id %>
+                                        </th>
+                                        <td>
+                                            <%- i.emp_name %>
+                                        </td>
+                                        <td>
+                                            <%- i.emp_email%>
+                                        </td>
+
+                                    </tr>
+
+
+
+                                    <%}); %>
+                                        <% } %>
+
+
+
+
+
+
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+
+            </div>
+
+            <!---- tab panel end -->
+
+
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+    <div class="container">
+        <form action="/Hod/close" class="w-75 m-auto form-bg my-5 py-4" id="myform" method="POST">
+            <div>
+                <h1 class="text-center text-uppercase"> close lead</h1>
+            </div>
+            <div class="form-group p-3">
+                <label>Customer Name <span class="star">*</span></label>
+                <input type="text" name="c_name" id="custname" class="form-control" aria-describedby="emailHelp"
+                    placeholder="Enter Customer Name" required>
+            </div>
+            <div class="form-group p-3">
+                <label>Customer Id <span class="star">*</span></label>
+                <input type="text" readonly class="form-control" id="custid" name="leadid" id="exampleInputEmail1"
+                    aria-describedby="emailHelp" placeholder="Enter Customer Id">
+
+            </div>
+            <div class="form-group p-3">
+                <label>Customer Email<span class="star">*</span></label>
+                <input type="email" name="c_email" id="custemail" class="form-control" id="exampleInputEmail1"
+                    aria-describedby="emailHelp" placeholder="Enter email" required>
+
+            </div>
+
+
+            <div class="form-group p-3 ">
+                <label for="exampleInputPassword1">Enter lead close description <span>*</span> </label>
+                <textarea name="closedesc" id="close" rows="3" placeholder="Enter lead close desc"
+                    class="form-control"></textarea>
+            </div>
+
+            <div class="form-group p-3">
+                <input type="submit" class="form-control p-2 bg-primary text-white" id="exampleInputPassword1"
+                    value="Close Lead">
+            </div>
+
+        </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <script>
+        function closeleadfun(btn) {
+            const myform = document.querySelector('#myform');
+            myform.style.display = 'block';
+            const parent = btn.parentElement.parentElement;
+            const c_id = parent.children[0].innerText;
+            const c_name = parent.children[1].innerText;
+            const c_email = parent.children[2].innerText;
+
+            const custname = document.querySelector('#custname');
+            const custid = document.querySelector('#custid');
+            const custemail = document.querySelector('#custemail');
+
+            custname.value = c_name;
+            custid.value = c_id;
+            custemail.value = c_email;
+
+
+        }
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
