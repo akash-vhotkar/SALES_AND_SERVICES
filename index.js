@@ -42,7 +42,7 @@ app.use('/Emp', require('./Routes/Employee'));
 
 
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5500;
 app.listen(port, (err) => {
     if (err) console.log(err);
     else console.log("server is running on port 5000");
